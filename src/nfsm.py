@@ -13,6 +13,8 @@ window_positions = {}
 fullscreen_windows = {}
 # dict that tracks maximized windows and their restore positions { window_id -> { position: (col, row), exit: Bool } }
 maximize_windows = {}
+# dict that tracks windows that run the full_width_cmd
+full_width_cmd_windows = {} 
 
 def main():
     t1 = threading.Thread(target=nfsm_stream)
@@ -32,27 +34,40 @@ def run_niri_action(action, window_id):
 
 def handle_request(tracked_windows, action):
     # get focused window
+    # tracked_windows is either fullscreen_windows or maximise_windows
     props = subprocess.run(
         ["niri", "msg", "--json", "focused-window"],
         capture_output=True,
         text=True,
     )
-    window_id = json.loads(props.stdout)["id"]
-
+    window - json.loads(props.stdout)
+    window_id = window["id"]
+    workspace_id = window["workspace_id"]
+    expanded = window["exit"]
+    
     # the window is exiting
     if window_id in tracked_windows:
         tracked_windows[window_id]["exit"] = True
+            if action == "FullwidthCommand"
+                # redefine action for FullwidthCommand toggle
+                action = determine_action(window)
         # trigger a niri window layouts changed event
         run_niri_action(action, window_id)
         return
 
     # the window is entering
     if window_id in window_positions:
-        col, row = window_positions[window_id]
+        col, row = window_positions[window_id]["position"]
         tracked_windows[window_id] = {
             "position": (col, row),
-            "exit": False
+            "exit": False,
+            "workspace_id": workspace_id
         }
+
+            if action == "FullwidthCommand"
+                    # redefine action for FullwidthCommand toggle
+                    action = determine_action(window)
+
         run_niri_action(action, window_id)
 
 def handle_fullscreen_request():
@@ -60,6 +75,11 @@ def handle_fullscreen_request():
 
 def handle_maximize_request():
     handle_request(maximize_windows, "maximize-window-to-edges")
+
+def handle_full_width_request():
+    handle_request(full_width_cmd_windows, "FullwidthCommand" )
+    
+
 
 def nfsm_socket():
     server_socket = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
@@ -94,6 +114,8 @@ def nfsm_socket():
                     handle_fullscreen_request()
                 elif cmd == "MaximizeRequest":
                     handle_maximize_request()
+                elif cmd == "FullWidthRequest":
+                    handle_full_width_request()
         except socket.error as e:
             print(f"Socket error: {e}")
         finally:
@@ -101,7 +123,7 @@ def nfsm_socket():
 
 def handle_window_closed(window_id):
     if window_id in window_positions:
-        col, row = window_positions[window_id]
+        col, row = window_positions[window_id]["position"]
         del window_positions[window_id]
     if window_id in fullscreen_windows:
         del fullscreen_windows[window_id]
@@ -151,11 +173,15 @@ def nfsm_stream():
 
             for window in windows:
                 window_id = window["id"]
+                workspace_id = window["workspace_id"]
                 layout = window.get("layout", {})
                 pos = layout.get("pos_in_scrolling_layout")
                 if pos is None:
                     continue  # skip floating windows
-                window_positions[window_id] = tuple(pos)
+                window_positions[window_id] = {
+                    "workspace_id" : workspace_id,
+                    "position" : tuple(pos)
+                }
 
         # it occurs when a window is closed; only the id is available
         if "WindowClosed" in event:
@@ -166,10 +192,15 @@ def nfsm_stream():
         if "WindowOpenedOrChanged" in event:
             window = event["WindowOpenedOrChanged"]["window"]
             window_id = window["id"]
+            workspace_id = window["workspace_id"]
             layout = window.get("layout", {})
             pos = layout.get("pos_in_scrolling_layout")
             if pos is not None:
-                window_positions[window_id] = tuple(pos)
+                window_positions[window_id] = {
+                    "workspace_id" : workspace_id,
+                    "position" : tuple(pos)
+                }
+
 
         if "WindowLayoutsChanged" not in event:
             continue
