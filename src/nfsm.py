@@ -52,20 +52,20 @@ def run_niri_action(action_parts, window_id):
         action_list = [tuple(action_parts)]
     
         
-for one_action in action_list:
-    if not one_action:
-        continue
-    # diagnostic log
-    print(f"RUNNING niri action: {one_action} --id {window_id}")
-    res = subprocess.run(
-        ["niri", "msg", "action", *one_action, "--id", str(window_id)],
-        capture_output=True,
-        text=True,
-    )
-    # print result for debugging
-    print(f" -> rc={res.returncode}, stdout={res.stdout.strip()!r}, stderr={res.stderr.strip()!r}")
-    # small pause so niri can process sequential actions
-    time.sleep(0.08)
+    for one_action in action_list:
+        if not one_action:
+            continue
+        # diagnostic log
+        print(f"RUNNING niri action: {one_action} --id {window_id}")
+        res = subprocess.run(
+            ["niri", "msg", "action", *one_action, "--id", str(window_id)],
+            capture_output=True,
+            text=True,
+        )
+        # print result for debugging
+        print(f" -> rc={res.returncode}, stdout={res.stdout.strip()!r}, stderr={res.stderr.strip()!r}")
+        # small pause so niri can process sequential actions
+        time.sleep(0.08)
 
 
 
@@ -90,9 +90,7 @@ def handle_request(tracked_windows, action):
 
         if action == "FullWidthRequest":
             # mark as exiting in tracked state
-            tracked_windows[window_id]["exit"] = True
             current_window = tracked_windows[window_id]
-            print(f"FullWidthRequest detected: exit:{current_window['exit']}")
             # determine the sequence of actions to run
             actions = determine_action(window_id, tracked_windows)
             print(f"Actions have been set to: {actions}")
@@ -108,13 +106,13 @@ def handle_request(tracked_windows, action):
         tracked_windows[window_id] = {
             "position": (col, row),
             "exit": False,
+            "expanded": False,
             "stacked": False,
             "width": window_width,
             "workspace_id": workspace_id
         }
         
         current_window = tracked_windows[window_id]
-        expanded = current_window["exit"]
         if action == "FullWidthRequest":
             stacked = is_window_stacked(window_id, tracked_windows)
             tracked_windows[window_id]["stacked"] = stacked
@@ -157,12 +155,12 @@ def is_window_stacked(window_id, tracked_windows):
     return stacked
 
 def determine_action(window_id, tracked_windows):
-    """Return a tuple of action-tuples describing what to run.
+    # Return a tuple of action-tuples describing what to run.
 
-    Always return something like: (("cmd",), ("cmd2","arg"))
-    """
+    # Always return something like: (("cmd",), ("cmd2","arg"))
+    
     window = tracked_windows[window_id]
-    expanded = window.get("exit", False)
+    expanded = window.get("expanded", False)
     stacked = window.get("stacked", False)
     window_width = window.get("width")
 
@@ -172,7 +170,8 @@ def determine_action(window_id, tracked_windows):
         if stacked:
             actions.append(("consume-or-expel-window-right",))
         actions.append(("set-window-width", "100%"))
-        tracked_windows[window_id]["exit"] = True
+        tracked_windows[window_id]["expanded"] = True
+        tracked_windows[window_id]["exit"] = False
         return tuple(actions)
 
     # Restore previous width
@@ -180,7 +179,8 @@ def determine_action(window_id, tracked_windows):
     if stacked:
         actions.append(("consume-or-expel-window-left",))
     actions.append(("set-window-width", str(window_width)))
-    tracked_windows[window_id]["exit"] = False
+    tracked_windows[window_id]["expanded"] = False
+    tracked_windows[window_id]["exit"] = True
     return tuple(actions)
 def nfsm_socket():
     server_socket = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
@@ -230,6 +230,8 @@ def handle_window_closed(window_id):
         del fullscreen_windows[window_id]
     if window_id in maximize_windows:
         del maximize_windows[window_id]
+    if window_id in full_width_cmd_windows:
+            del full_width_cmd_windows[window_id]
 
 def niri_cmd(command):
     subprocess.run(["niri", "msg", "action", command])
