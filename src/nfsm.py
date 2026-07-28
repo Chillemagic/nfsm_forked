@@ -86,22 +86,20 @@ def handle_request(tracked_windows, action):
     
     # the window is exiting
     if window_id in tracked_windows: 
-        
-
-        if action == "FullWidthRequest":
-            # mark as exiting in tracked state
-            current_window = tracked_windows[window_id]
+       
+        if action == "FullWidthRequest": 
             # determine the sequence of actions to run
             actions = determine_action(window_id, tracked_windows)
             print(f"Actions have been set to: {actions}")
-            run_niri_action(actions, window_id)
-            return
-
+            run_niri_action(actions, window_id) 
+        else: 
+            tracked_windows[window_id]["exit"] = True
+            run_niri_action(action, window_id)
+        return
     # the window is entering
     if window_id in window_positions:
         # check window if it is stacked
-
-        window_width = window["layout"]["window_size"][0]
+ 
         col, row = window_positions[window_id]["position"]
         tracked_windows[window_id] = {
             "position": (col, row),
