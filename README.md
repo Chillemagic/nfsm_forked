@@ -1,6 +1,7 @@
 # NFSM Forked: 
 
-[![Watch the video](https://raw.githubusercontent.com/Chillemagic/nfsm_forked/main/src/assets/demo_video/forked_preview.jpg)](https://raw.githubusercontent.com/Chillemagic/nfsm_forked/main/src/assets/demo_video/forked_demo.mp4)
+[![Watch the video](https://github.com/Chillemagic/nfsm_forked/raw/main/src/assets/demo_video/forked_preview.jpg)](https://github.com/Chillemagic/nfsm_forked/raw/main/src/assets/demo_video/forked_demo.mp4)
+
 
 # Niri FullScreen Manager
 
