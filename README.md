@@ -1,3 +1,7 @@
+# NFSM Forked: 
+
+[![Watch the video](https://raw.githubusercontent.com/Chillemagic/nfsm_forked/main/src/assets/demo_video/forked_preview.jpg)](https://raw.githubusercontent.com/Chillemagic/nfsm_forked/main/src/assets/demo_video/forked_demo.mp4)
+
 # Niri FullScreen Manager
 
 [![ci](https://github.com/gvolpe/nfsm/actions/workflows/ci.yml/badge.svg)](https://github.com/gvolpe/nfsm/actions/workflows/ci.yml)
