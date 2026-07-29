@@ -65,7 +65,7 @@ def run_niri_action(action_parts, window_id):
         # print result for debugging
         print(f" -> rc={res.returncode}, stdout={res.stdout.strip()!r}, stderr={res.stderr.strip()!r}")
         # small pause so niri can process sequential actions
-        time.sleep(0.08)
+        # time.sleep(0.08)
 
 
 
@@ -80,7 +80,7 @@ def handle_request(tracked_windows, action):
     window = json.loads(props.stdout)
     window_id = window["id"]
     workspace_id = window["workspace_id"]
-    window_width = window["layout"]["window_size"][0]
+ 
 
     # expanded = window["exit"]
     
@@ -101,6 +101,7 @@ def handle_request(tracked_windows, action):
         # check window if it is stacked
  
         col, row = window_positions[window_id]["position"]
+        window_width = window["layout"]["window_size"][0]
         tracked_windows[window_id] = {
             "position": (col, row),
             "exit": False,
