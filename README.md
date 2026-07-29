@@ -1,8 +1,37 @@
 # NFSM Forked: 
 
-[![Watch the video](https://github.com/Chillemagic/nfsm_forked/raw/main/src/assets/demo_video/forked_preview.jpg)](https://github.com/Chillemagic/nfsm_forked/raw/main/src/assets/demo_video/forked_demo.mp4)
+This is a fork of [nfsm by gvolpe](https://github.com/gvolpe/nfsm) that extends the functionality of the python script to toggle expanding a selected window to 100% width and restore it's original position as can be seen here:
 
 https://github.com/user-attachments/assets/fadd07cc-7e0a-4f5c-9fc9-717e129fa10b
+
+## Overview
+
+This fork started out of a desire to have a slightly different behavior of the full screen function that was the only option on the old version of the python script. Niri's fullscreen mode removes the navbar from the screen and also makes the window opaque which is probably fine for 99% of but I like a little transparency. Here is the same window in both full screen and full width for comparison: 
+
+## Full screen: 
+<img width="1920" height="1080" alt="full_screen" src="https://github.com/user-attachments/assets/037bb7aa-b117-4cad-8e1c-96718caeeaf2" />
+
+## Full width: 
+<img width="1920" height="1080" alt="full_width" src="https://github.com/user-attachments/assets/83bb0333-3cbe-409e-ab32-ee38201177a0" />
+
+# What was changed?
+
+Full width was a challenge because whilst Niri natively supports both full screen and maximize window to edges toggles, there appears to be no such toggle for expanding a window width 100% and restoring it's original width. My solution involves capturing additional information on the window calling the full width command. Storing a window's non expanded width and the window's workspace were both needed to facilitate the full width command. 
+
+Two functions were added: is_window_stacked() and determine_action() to generate the correct actions for Niri to execute to achieve a toggle function.
+
+# Why not stick with maximize-window-to-edges?
+
+1. Truthfully I wasn't aware of that Niri command until I had finished coding my solution to the issue.
+2. To me the aesthetic of a full width window in comparison to an expanded window is way more pleasant.
+3. For the challenge 
+
+
+# WIP:
+- Usage guide required.  
+
+
+
 
 # Niri FullScreen Manager
 
