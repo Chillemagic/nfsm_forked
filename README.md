@@ -2,14 +2,13 @@
 
 [![Watch the video](https://github.com/Chillemagic/nfsm_forked/raw/main/src/assets/demo_video/forked_preview.jpg)](https://github.com/Chillemagic/nfsm_forked/raw/main/src/assets/demo_video/forked_demo.mp4)
 
+https://github.com/user-attachments/assets/fadd07cc-7e0a-4f5c-9fc9-717e129fa10b
 
 # Niri FullScreen Manager
 
 [![ci](https://github.com/gvolpe/nfsm/actions/workflows/ci.yml/badge.svg)](https://github.com/gvolpe/nfsm/actions/workflows/ci.yml)
 
 It provides [Niri](https://github.com/YaLTeR/niri) with functionality that addresses [this Niri issue](https://github.com/YaLTeR/niri/issues/426).
-
-https://github.com/user-attachments/assets/b78c1f63-4fe9-40e5-ace4-f5fb7165194f
 
 ## Overview
 
