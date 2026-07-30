@@ -25,8 +25,8 @@
   This fork introduces a stateful full-width toggle that
   expands the focused window to 100% width and restores its
   previous width when the command is used again.
-
-  https://github.com/user-attachments/assets/fadd07cc-7e0a-4f5c-9fc9-717e129fa10b
+ 
+  https://github.com/user-attachments/assets/de570b4e-aa1a-4807-aeea-fd0f0f25c023
 
   ## Key Changes
 
