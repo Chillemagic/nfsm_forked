@@ -1,7 +1,6 @@
  # NFSM Forked
 
-  A personal extension of [gvolpe/nfsm](https://github.com/
-  gvolpe/nfsm), adding a custom **full-width window toggle**
+  A personal extension of [gvolpe/nfsm](https://github.com/gvolpe/nfsm), adding a custom **full-width window toggle**
   for the [Niri](https://github.com/YaLTeR/niri) scrollable-
   tiling Wayland compositor.
 
@@ -9,10 +8,6 @@
   daemon development, event-driven state management, Unix
   socket communication, shell scripting, and integration with
   Niri’s IPC interface.
-
-  > This project builds upon the original NFSM
-  implementation. The sections below describe the
-  functionality and changes introduced in this fork.
 
   ## Project Overview
 
@@ -116,18 +111,15 @@
   Native fullscreen hides surrounding desktop elements and
   changes the window’s visual presentation.
 
-  <img width="1920" height="1080" alt="Window using Niri
-  native fullscreen mode" src="https://github.com/user-
-  attachments/assets/037bb7aa-b117-4cad-8e1c-96718caeeaf2" />
+<img width="2736" height="1824" alt="image" src="https://github.com/user-attachments/assets/d3955bb0-a8a2-4419-9358-5351bd9c1834" />
+
 
   ### Custom full-width mode
 
   Full-width mode preserves the window’s normal height,
   transparency, and desktop chrome.
 
-  <img width="1920" height="1080" alt="Window using the
-  custom NFSM full-width mode" src="https://github.com/user-
-  attachments/assets/83bb0333-3cbe-409e-ab32-ee38201177a0" />
+<img width="2736" height="1824" alt="image" src="https://github.com/user-attachments/assets/9296ad3b-e61c-40fc-bb17-60ce281f58e1" />
 
   ## Technical Approach
 
@@ -155,11 +147,12 @@
       | FullWidthRequest
       v
   Restore recorded width and layout state
-
+```
   This work required coordinating asynchronous layout events
   with user-issued commands. In particular, restoration logic
   must distinguish expected layout changes from ordinary
   window movement.
+
 
   ## What I Learned
 
